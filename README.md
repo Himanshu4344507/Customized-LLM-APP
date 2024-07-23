@@ -1,42 +1,29 @@
-# Customized-LLM-APP
+**How RAG Enhances LLMs**
 
-Building a Retrieval-Augmented Generation (RAG) bot can significantly enhance the capabilities of a language model by incorporating external knowledge to generate more accurate and contextually relevant responses. This guide will walk you through creating a simple RAG bot using Gradio and the Hugging Face APIs.
+**Retrieve Information:** RAG improves a language model's performance by retrieving relevant documents based on a user’s query.
+**Augment Context:** It combines the retrieved documents with the original user query, providing more context to the model.
+**Generate Response:** The model uses this enriched context to generate a more accurate and relevant response.
 
-But how does RAG enhance LLM’s performance?
+**Basic Steps in RAG**
 
-RAG improves the performance of language models by augmenting them with external documents. This method retrieves relevant documents based on the user query and combines them with the original prompt before passing them to the language model for response generation. This approach ensures that the language model can access up-to-date and domain-specific information without the need for extensive retraining.
+**Input:** The user’s question is the starting point.
+**Indexing:** Documents are indexed into a database by breaking them into chunks and creating vector embeddings.
+**Retrieval:** The system finds relevant documents by comparing the query to the indexed vectors.
+**Generation:** The system combines the retrieved documents with the original query and sends this combined input to the model to generate a response.
 
+**Building a RAG Chatbot**
 
+Prepare Your Knowledge Base: Use a PDF or similar document as the source of knowledge.
 
-A common scenario of RAG helping LLM (Source)
+**Create Required Files:**
 
-The basic steps in RAG can be simplified as follows:
+**requirements.txt:** Lists necessary libraries.
+**app.py: **The script for your chatbot.
+**Set Up on Hugging Face:** Create an account on Hugging Face to manage and use the models.
 
-Input: The question to which the LLM system responds is referred to as the input. If no RAG is used, the LLM is directly used to respond to the question.
+**Tools Used**
 
-Indexing: If RAG is used, then a series of related documents are indexed by chunking them first, generating embeddings of the chunks, and indexing them into a vector store. At inference, the query is also embedded in a similar way.
+**Zephyr LLM:** Your language model.
+**all-MiniLM-L6-v2:** A fast and effective model for mapping sentences to vectors.
 
-
-Basic retrieval steps in RAG. (Source)
-
-Retrieval: The relevant documents are obtained by comparing the query against the indexed vectors, also denoted as “Relevant Documents”.
-
-Generation: The relevant documents are combined with the original prompt as additional context. The combined text and prompt are then passed to the model for response generation which is then prepared as the final output of the system to the user.
-
-In the example provided, using the model directly fails to respond to the question due to a lack of knowledge of current events. On the other hand, when using RAG, the system can pull the relevant information needed for the model to answer the question appropriately. (Source)
-
-Now Let’s Build a Chatbot using RAG:
-
-I have used Zephyr LLM model and all-MiniLM-L6-v2 sentence transformer model. This sentence-transformers model maps sentences & paragraphs to a 384 dimensional dense vector space and can be used for tasks like clustering or semantic search.
-
-The all-* models were trained on all available training data (more than 1 billion training pairs) and are designed as general purpose models. The all-mpnet-base-v2 model provides the best quality, while all-MiniLM-L6-v2 is 5 times faster and still offers good quality. Toggle All models to see all evaluated original models.
-
-We need the following ingredients:
-
-1. A PDF as your knowledgebase
-
-2. A requirements.txt file
-
-3. An app.py file
-
-4. An account on Hugging Face (See this blog to learn about building a LLM chatbot in Hugging Face)
+This setup will enable your chatbot to access and use up-to-date, relevant information to answer user queries more effectively.
