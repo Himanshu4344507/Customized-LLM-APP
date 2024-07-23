@@ -14,11 +14,10 @@ class MyApp:
         self.documents = []
         self.embeddings = None
         self.index = None
-        self.load_pdf("THEDIA1.pdf")
+        self.load_pdf("EAC.pdf")
         self.build_vector_db()
 
     def load_pdf(self, file_path: str) -> None:
-        """Extracts text from a PDF file and stores it in the app's documents."""
         doc = fitz.open(file_path)
         self.documents = []
         for page_num in range(len(doc)):
@@ -28,7 +27,6 @@ class MyApp:
         print("PDF processed successfully!")
 
     def build_vector_db(self) -> None:
-        """Builds a vector database using the content of the PDF."""
         model = SentenceTransformer('all-MiniLM-L6-v2')
         self.embeddings = model.encode([doc["content"] for doc in self.documents])
         self.index = faiss.IndexFlatL2(self.embeddings.shape[1])
@@ -36,7 +34,6 @@ class MyApp:
         print("Vector database built successfully!")
 
     def search_documents(self, query: str, k: int = 3) -> List[str]:
-        """Searches for relevant documents using vector similarity."""
         model = SentenceTransformer('all-MiniLM-L6-v2')
         query_embedding = model.encode([query])
         D, I = self.index.search(np.array(query_embedding), k)
@@ -53,7 +50,7 @@ def respond(
     temperature: float,
     top_p: float,
 ):
-    system_message = "You are a knowledgeable DBT coach. You always talk about one options at at a time. you add greetings and you ask questions like real counsellor. Remember you are helpful and a good listener. You are concise and never ask multiple questions, or give long response. You response like a human counsellor accurately and correctly. consider the users as your client. and practice verbal cues only where needed. Remember you must be respectful and consider that the user may not be in a situation to deal with a wordy chatbot.  You Use DBT book to guide users through DBT exercises and provide helpful information. When needed only then you ask one follow up question at a time to guide the user to ask appropiate question. You avoid giving suggestion if any dangerous act is mentioned by the user and refer to call someone or emergency."
+    system_message = "You are a knowledgeable tech support specialized in GeekTechHub. Always maintain a focused approach, incorporating greetings and using questioning techniques akin to a technical consultant. Ensure responses are succinct, accurate, and respectful, leveraging best practices to guide users through technical exercises and offer insightful information. Treat users as clients, utilizing verbal prompts judiciously. Acknowledge that users may prefer concise interactions. Pose one clarifying question at a time to assist users in formulating precise queries. In cases where users mention potential risks, refrain from providing direct advice and direct them to emergency services."
     messages = [{"role": "system", "content": system_message}]
 
     for val in history:
@@ -72,7 +69,7 @@ def respond(
     response = ""
     for message in client.chat_completion(
         messages,
-        max_tokens=100,
+        max_tokens=1000,
         stream=True,
         temperature=0.98,
         top_p=0.7,
@@ -85,22 +82,20 @@ demo = gr.Blocks()
 
 with demo:
     gr.Markdown(
-        "‼️Disclaimer: This chatbot is based on a DBT exercise book that is publicly available. and just to test RAG implementation.‼️"
+        "‼️Disclaimer: This chatbot is based on Hardware and software support pdf that is publically available‼️"
     )
     
     chatbot = gr.ChatInterface(
         respond,
         examples=[
-            ["I feel overwhelmed with work."],
-            ["Can you guide me through a quick meditation?"],
-            ["How do I stop worrying about things I can't control?"],
-            ["What are some DBT skills for managing anxiety?"],
-            ["Can you explain mindfulness in DBT?"],
-            ["I am interested in DBT excercises"],
-            ["I feel restless. Please help me."],
-            ["I have destructive thoughts coming to my mind repetatively."]
+            ["What was the ENIAC and why was it significant in the history of computing?"],
+            ["What are the minimum essential parts required for a computer to function?"],
+            ["Differentiate between input and output devices with examples."],
+            ["What is an operating system and what are its primary functions?"],
+            ["How are computers used in the banking and financial sectors?"],
+            ["Describe the role of computers in business and communication."],
         ],
-        title='Dialectical Behaviour Therapy Assistant👩‍⚕️🧘‍♀️'
+        title='GeekTechHub Chatbot',
     )
 
 if __name__ == "__main__":
